@@ -22,8 +22,8 @@ export default class VisitList extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.visits.map((visit, idx) => {
-                        return <Visit key={idx} visit={visit}/>
+                    {this.props.visits.map((visit) => {
+                        return <Visit key={visit.id} visit={visit}/>
                     })}
                 </tbody>
                 <tfoot></tfoot>

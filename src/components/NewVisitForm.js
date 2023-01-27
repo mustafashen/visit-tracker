@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { v4 as uuid } from 'uuid'
 
 export default class NewEntrySection extends Component {
     constructor(props) {
@@ -10,7 +11,7 @@ export default class NewEntrySection extends Component {
                 startTime: '',
                 endTime: '',
                 allVisitors: [],
-                work: '',
+                workDone: '',
                 cost: ''
             },
             selectedVisitor: ''
@@ -39,7 +40,13 @@ export default class NewEntrySection extends Component {
 
     handleSubmit(evt) {
         evt.preventDefault()
-        this.props.createNewVisit(this.state.visit)
+
+        let finalVisit = this.state.visit
+        finalVisit.id = uuid()
+        finalVisit.loc = JSON.stringify([finalVisit.loc])
+        finalVisit.allVisitors = JSON.stringify(finalVisit.allVisitors)
+        
+        this.props.createNewVisit(finalVisit)
         this.handleClear()
     }
 
@@ -51,7 +58,7 @@ export default class NewEntrySection extends Component {
                 startTime: '',
                 endTime: '',
                 allVisitors: [],
-                work: '',
+                workDone: '',
                 cost: ''
             },
             selectedVisitor: ''
@@ -62,7 +69,7 @@ export default class NewEntrySection extends Component {
         const newVisitObj = this.state.visit
 
         if (!newVisitObj.allVisitors.includes(this.state.selectedVisitor) &&
-            this.props.visitorChoices.includes(this.state.selectedVisitor)) {
+            this.state.selectedVisitor) {
             newVisitObj.allVisitors.push(this.state.selectedVisitor)
             this.setState({
                 visit: newVisitObj
@@ -74,6 +81,7 @@ export default class NewEntrySection extends Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
+        <h2>Yeni Ziyaret</h2>
         <label htmlFor='loc'>Ziyaret Yeri:</label>
         <input name='loc' id='loc'  type='text' value={this.state.visit.loc} onChange={this.handleChange}/>
         <br></br>
@@ -100,8 +108,8 @@ export default class NewEntrySection extends Component {
         })}
         <br></br>
 
-        <label htmlFor='work'>Yapilan Is:</label>
-        <input name='work' id='work' type='text' value={this.state.visit.work} onChange={this.handleChange}/>
+        <label htmlFor='workDone'>Yapilan Is:</label>
+        <input name='workDone' id='workDone' type='text' value={this.state.visit.workDone} onChange={this.handleChange}/>
         <br></br>
         
         <label htmlFor='cost'>Yapilan Masraf:</label>
