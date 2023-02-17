@@ -19,11 +19,15 @@ export default class VisitList extends Component {
                         <th>Ziyaretciler</th>
                         <th>Yapilan Is</th>
                         <th>Yapilan Masraf</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {this.props.visits.map((visit) => {
-                        return <Visit key={visit.id} visit={visit}/>
+                        return <Visit key={visit.id} visit={visit} 
+                                      deleteVisit={this.props.deleteVisit}
+                                      activateEdit={this.props.activateEdit}/>
                     })}
                 </tbody>
                 <tfoot></tfoot>

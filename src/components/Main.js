@@ -1,68 +1,52 @@
 import React, { Component } from 'react'
 import NewEntrySection from './NewVisitForm'
+import Order from './Order'
 import QueryForm from './QueryForm'
+import UpdateVisitForm from './UpdateVisitForm'
 import VisitList from './VisitList'
+import moment from 'moment'
 
 export default class Main extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        visits: [
-          
-        ],
+        visits: [],
         visitorChoices: ['Basri', 'Kemal', 'Pinar', 'Gizem'],
-        locationChoices: ['Baytek', 'Cemsel', 'Erbek', 'Bilge']
+        locationChoices: ['Baytek', 'Cemsel', 'Erbek', 'Bilge'],
+        visitToUpdate: ''
     }
 
     this.create = this.create.bind(this)
     this.refreshState = this.refreshState.bind(this)
     this.query = this.query.bind(this)
+    this.delete = this.delete.bind(this)
+    this.activateEdit = this.activateEdit.bind(this)
+    this.closeEdit = this.closeEdit.bind(this)
+    this.update = this.update.bind(this)
   }
 
   async refreshState(stringInput) {
-    const proxyServer = 'https://visit-cors-proxy.onrender.com/'
-    const readRoute = 'https://visit-tracker-server.onrender.com/read-visit/'
-    const queryString = stringInput ? `?${stringInput}` : ''
-    const route = `${proxyServer}${readRoute}${queryString}`
-    console.log(route)
-    fetch(route, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+    await window.electron.get(stringInput)
+    .then(result => {
+      if(result.Error) console.log(result.Error)
+      else {
+        console.log(result)
+        this.setState({visits: result.visits})
       }
     })
-    .then(resolve => resolve.json())
-    .then(result => {
-      console.log(result)
-      if(Object.keys(result).length === 0) throw 'No result'
-      else this.setState({visits: result})
-    })
-    .catch(err => {
-      this.setState({visits: []})
-      console.log(err)
-    })
+
   }
 
   async create(visit) {
-    
-    // this.setState({visits: [...this.state.visits, {...visit}]})
-
-    const proxyServer = 'https://visit-cors-proxy.onrender.com/'
-    const createRoute = 'https://visit-tracker-server.onrender.com/create-visit'
-
-    fetch(`${proxyServer}${createRoute}`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: `{"params": ${JSON.stringify(visit)}}`
+    console.log(visit)
+    await window.electron.post(visit)
+    .then(result => {
+      if(result.Error) console.log(result.Error)
+      else {
+        console.log(result)
+        this.refreshState()
+      }
     })
-    .then(resolve => resolve.json())
-    .then(result => {console.log(result)})
-    .then(this.refreshState())
-
-    // console.log(`{"params": ${JSON.stringify(visit)}}`)
   }
 
   async query(queryParams) {
@@ -82,24 +66,72 @@ export default class Main extends Component {
     //   queryString += `"visitorClause":"${queryParams.visitorClause}"`}
     if(queryParams.costMin || queryParams.costMax) {
         if(queryString) queryString += '&'
-        queryString += `cost=[${queryParams.costMin ? queryParams.costMin : ''},
-                                 ${queryParams.costMax ? queryParams.costMax : ''}]`}
+        queryString += `cost=[${queryParams.costMin ? queryParams.costMin : '""'},
+                                 ${queryParams.costMax ? queryParams.costMax : '""'}]`}
     if(queryParams.dateMin || queryParams.dateMax) {
         if(queryString) queryString += '&'
-        queryString += `dates=[${queryParams.dateMin ? `"${queryParams.dateMin}"` : ''},
-                                  ${queryParams.dateMax ? `"${queryParams.dateMax}"` : ''}]`}
+        queryString += `dates=[${queryParams.dateMin ? `"${queryParams.dateMin}"` : '""'},
+                                  ${queryParams.dateMax ? `"${queryParams.dateMax}"` : '""'}]`}
     if(queryParams.startTimeMin || queryParams.startTimeMax) {
         if(queryString) queryString += '&'
-        queryString += `startTimeRange=[${queryParams.startTimeMin ? `"${queryParams.startTimeMin}"`: ''},
-                                      ${queryParams.startTimeMax ? `"${queryParams.startTimeMax}"` : ''}]`}
+        queryString += `startTimeRange=[${queryParams.startTimeMin ? `"${queryParams.startTimeMin}"`: '""'},
+                                      ${queryParams.startTimeMax ? `"${queryParams.startTimeMax}"` : '""'}]`}
     if(queryParams.endTimeMin || queryParams.endTimeMax) {
         if(queryString) queryString += '&'
-        queryString += `endTimeRange=[${queryParams.endTimeMin ? `"${queryParams.endTimeMin}"` : ''},
-                                    ${queryParams.endTimeMax ? `"${queryParams.endTimeMax}"` : ''}]`}
-    
+        queryString += `endTimeRange=[${queryParams.endTimeMin ? `"${queryParams.endTimeMin}"` : '""'},
+                                    ${queryParams.endTimeMax ? `"${queryParams.endTimeMax}"` : '""'}]`}
+    if(queryParams.order) {
+      if(queryString) queryString += '&'
+      queryString += `order=["${queryParams.order[0]}","${queryParams.order[1]}"]`
+    }
     console.log(queryString)
 
     this.refreshState(queryString)
+  }
+
+  async delete(id) {
+    window.electron.delete(id)
+    .then(result => {
+      if(result.Error) console.log(result.Error)
+      else {
+        console.log(result)
+        this.refreshState()
+      }
+    })
+  }
+
+  async update(visit) {
+    window.electron.put(visit)
+    .then(result => {
+      if(result.Error) console.log(result.Error)
+      else {
+        console.log(result)
+        this.refreshState()
+      }
+    })
+  }
+
+  async activateEdit(visit) {
+    visit = {...visit}
+    visit.loc = visit.loc[0]
+    visit.date = moment(visit.date).format('YYYY-MM-DD')
+    visit.startTime = visit.startTime.slice(0, 5)
+    visit.endTime = visit.endTime.slice(0, 5)
+
+    this.setState({
+      visitToUpdate: ''
+    }, () => {
+      this.setState({
+        visitToUpdate: visit
+      }, () => console.log(this.state))
+    })
+
+  }
+
+  closeEdit() {
+    this.setState({
+      visitToUpdate: ''
+    }, () => console.log(this.state))
   }
 
   async componentDidMount() {
@@ -110,11 +142,21 @@ export default class Main extends Component {
     return (
       <div>
         <NewEntrySection createNewVisit={this.create} 
-                         visitorChoices={this.state.visitorChoices}/>
+                         visitorChoices={this.state.visitorChoices}
+                         locationChoices={this.state.locationChoices}/>
         <QueryForm locationChoices={this.state.locationChoices} 
                    visitorChoices={this.state.visitorChoices}
                    makeNewQuery={this.query}/>
-        <VisitList visits={this.state.visits}/>
+        <Order makeNewQuery={this.query}/>
+        <VisitList visits={this.state.visits}
+                   deleteVisit={this.delete}
+                   activateEdit={this.activateEdit}/>
+        {this.state.visitToUpdate ? <UpdateVisitForm updateVisit={this.update}
+                                    visitorChoices={this.state.visitorChoices}
+                                    locationChoices={this.state.locationChoices}
+                                    closeEdit={this.closeEdit}
+                                    visitToUpdate={this.state.visitToUpdate}/> 
+                              : false}
       </div>
     )
   }

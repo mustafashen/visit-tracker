@@ -10,6 +10,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "moment": "^2.29.4",
+    "node-fetch": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -17,8 +18,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
+    "start": "export BROWSER=none && react-scripts start",
+    "start-electron": "export $(grep -v '^#' .env | xargs) && electron .",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

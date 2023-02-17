@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { v4 as uuid } from 'uuid'
-/* 
-- bir sey degistiginde hemen query yapsin
-*/
+
 export default class QueryForm extends Component {
 
   constructor(props) {
@@ -22,10 +20,7 @@ export default class QueryForm extends Component {
         workDone: '',
         costMin: '',
         costMax: ''
-      },
-      selectedLocation: this.props.locationChoices.reduce((elems, key) => ({ ...elems, [key]: false}), {}),
-      selectedVisitor: this.props.visitorChoices.reduce((elems, key) => ({ ...elems, [key]: false}), {}),
-      selectedDateSpan: ''
+      }
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClear = this.handleClear.bind(this)
@@ -33,33 +28,76 @@ export default class QueryForm extends Component {
   }
   
   handleChange(evt) {
-    if (Object.keys(this.state.selectedLocation)
-                     .includes(evt.target.name)) {
+    if (evt.target.name === 'locSel') {
         this.setState({
-          selectedLocation: {...this.state.selectedLocation,
-                            [evt.target.name]: evt.target.checked
+          visitQuery: {
+            ...this.state.visitQuery,
+            allLocations: evt.target.checked ? [...this.state.visitQuery.allLocations].concat(evt.target.value) : 
+                                               [...this.state.visitQuery.allLocations].filter((val = evt.target.value) => {
+                                                if (evt.target.value === val) {
+                                                  return false
+                                                }
+                                                return true 
+                                               })
           }
-        })
-    } else if (Object.keys(this.state.selectedVisitor)
-                     .includes(evt.target.name)) {
+        }, () => this.handleSubmit())
+    } else if (evt.target.name === 'visSel') {
         this.setState({
-          selectedVisitor: {...this.state.selectedVisitor,
-                              [evt.target.name]: evt.target.checked
+          visitQuery: {
+            ...this.state.visitQuery,
+            allVisitors: evt.target.checked ? [...this.state.visitQuery.allVisitors].concat(evt.target.value) : 
+                                              [...this.state.visitQuery.allVisitors].filter((val = evt.target.value) => {
+                                                if (evt.target.value === val) {
+                                                  return false
+                                                }
+                                                return true 
+                                               })
           }
-        })
-    } else if (evt.target.name === 'selectedDateSpan') {
-        this.setState({
-          selectedDateSpan: evt.target.value
-        })
-    } else {
+        }, () => this.handleSubmit())
+    } else if(evt.target.name === 'selectedDateSpan') {
+      let [dateMin, dateMax] = ['','']
+
+      dateMax = moment().format('YYYY-MM-DD')
+      switch (evt.target.value) {
+        case 'last5Year':
+          dateMin = moment().subtract(5, 'year').format('YYYY-MM-DD')
+        break;
+        case 'last2Year':
+          dateMin = moment().subtract(2, 'year').format('YYYY-MM-DD')
+        break;
+        case 'lastYear':
+          dateMin = moment().subtract(1, 'year').format('YYYY-MM-DD')
+          break;
+        case 'last6Month':
+          dateMin = moment().subtract(6, 'month').format('YYYY-MM-DD')
+          break;
+        case 'last3Month':
+          dateMin = moment().subtract(3, 'month').format('YYYY-MM-DD')
+          break;
+        case 'lastMonth':
+          dateMin = moment().subtract(1, 'month').format('YYYY-MM-DD')
+          break;
+        case 'lastWeek':
+          dateMin = moment().subtract(1, 'week').format('YYYY-MM-DD')
+        break;
+        default:
+          break;
+      }
+      this.setState({
+        visitQuery: {
+          ...this.state.visitQuery,
+          dateMin,
+          dateMax
+        }
+      }, () => this.handleSubmit())
+    }else {
         const newVisitObj = this.state.visitQuery
         newVisitObj[evt.target.name] = evt.target.value
            
         this.setState({
             visitQuery: newVisitObj
-        })
+        }, () => this.handleSubmit())
     }
-    // this.handleSubmit()
   }
 
   handleClear() {
@@ -80,47 +118,10 @@ export default class QueryForm extends Component {
       }})
   }
 
-  handleSubmit(evt) {
-    evt.preventDefault()
+  handleSubmit() {
+    // evt.preventDefault()
     
     let finalQuery = {...this.state.visitQuery}
-    
-    if(this.state.selectedDateSpan) {
-      finalQuery.dateMax = moment().format('YYYY-MM-DD')
-      switch (this.state.selectedDateSpan) {
-        case 'last5Year':
-          finalQuery.dateMin = moment().subtract(5, 'year').format('YYYY-MM-DD')
-        break;
-        case 'last2Year':
-          finalQuery.dateMin = moment().subtract(2, 'year').format('YYYY-MM-DD')
-        break;
-        case 'lastYear':
-          finalQuery.dateMin = moment().subtract(1, 'year').format('YYYY-MM-DD')
-          break;
-        case 'last6Month':
-          finalQuery.dateMin = moment().subtract(6, 'month').format('YYYY-MM-DD')
-          break;
-        case 'last3Month':
-          finalQuery.dateMin = moment().subtract(3, 'month').format('YYYY-MM-DD')
-          break;
-        case 'lastMonth':
-          finalQuery.dateMin = moment().subtract(1, 'month').format('YYYY-MM-DD')
-          break;
-        case 'lastWeek':
-          finalQuery.dateMin = moment().subtract(1, 'week').format('YYYY-MM-DD')
-        break;
-        default:
-          break;
-      }
-    }
-
-    for (const [key, value] of Object.entries(this.state.selectedLocation)) {
-      if(value) finalQuery.allLocations.push(key)
-    }
-
-    for (const [key, value] of Object.entries(this.state.selectedVisitor)) {
-      if(value) finalQuery.allVisitors.push(key)
-    }
 
     if(finalQuery.allLocations.length < 1) {
       finalQuery.allLocations = ''
@@ -131,23 +132,60 @@ export default class QueryForm extends Component {
     }
     console.log(finalQuery)
     this.props.makeNewQuery(finalQuery)
-    this.handleClear()
+    // this.handleClear()
   }
+
+
+  // componentDidUpdate() {
+  //   const currentLocs = []
+  //   const selectedLocation = this.state.selectedLocation
+
+  //   const currentVisitors = []
+  //   const selectedVisitor = this.state.selectedVisitor
+    
+  //   for (const [key, value] of Object.entries(selectedLocation)) {
+  //     if(value) currentLocs.push(key)
+  //   }
+
+  //   for (const [key, value] of Object.entries(selectedVisitor)) {
+  //     if(value) currentVisitors.push(key)
+  //   }
+
+  //   if(!(currentLocs.sort().join() ===
+  //     this.state.visitQuery.allLocations.sort().join()))
+  //     this.setState({
+  //       visitQuery: {
+  //         ...this.state.visitQuery,
+  //         allLocations: currentLocs
+  //       }
+  //   })
+
+  //   if(!(currentVisitors.sort().join() ===
+  //     this.state.visitQuery.allVisitors.sort().join()))
+  //     this.setState({
+  //       visitQuery: {
+  //         ...this.state.visitQuery,
+  //         allVisitors: currentVisitors
+  //       }
+  //     })
+    
+  //   this.handleSubmit()
+  // }
+
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-      {/* <form> */}
+      <form>
         <h2>Filtre</h2>
         <div>
             {
-              Object.keys(this.state.selectedLocation).map(key => {
+              this.props.locationChoices.map(key => {
                 const locCbKey = uuid()
                 return <div key={uuid()}>
                   <label htmlFor={locCbKey} key={uuid()}>{key}</label>
-                  <input type="checkbox" name={key} key={locCbKey} id={key}
+                  <input type="checkbox" value={key} name={'locSel'} key={locCbKey} id={locCbKey}
                          onChange={this.handleChange} 
-                         checked={this.state.selectedLocation[key]}></input>
+                         checked={this.state.visitQuery.allLocations.includes(key)}></input>
                 </div>
               })
             }
@@ -200,13 +238,13 @@ export default class QueryForm extends Component {
         </div>
         <div>
           {
-            Object.keys(this.state.selectedVisitor).map(key => {
+            this.props.visitorChoices.map(key => {
               const visCBKey = uuid()
               return <div key={uuid()}>
                 <label htmlFor={visCBKey} key={uuid()}>{key}</label>
-                <input type="checkbox" name={key} key={visCBKey} id={key}
+                <input type="checkbox" value={key} name={'visSel'} key={visCBKey} id={visCBKey}
                         onChange={this.handleChange} 
-                        checked={this.state.selectedVisitor[key]}></input>
+                        checked={this.state.visitQuery.allVisitors.includes(key)}></input>
               </div>
             })
           }
@@ -222,9 +260,9 @@ export default class QueryForm extends Component {
                        onChange={this.handleChange} 
                        type='number'/>
         </div>
-        <input type='submit' value='Ara'/>
+        <button type='button' onClick={this.handleSubmit}>Yenile</button>
         <button type='button' onClick={this.handleClear}>Temizle</button>
       </form>
     )
-  }
+  } 
 }

@@ -5,6 +5,16 @@ export default class Visit extends Component {
     
     constructor(props) {
         super(props)
+        this.handleDelete = this.handleDelete.bind(this)
+        this.handleEdit = this.handleEdit.bind(this)
+    }
+
+    handleDelete() {
+        this.props.deleteVisit(this.props.visit.id)
+    }
+
+    handleEdit() {
+        this.props.activateEdit(this.props.visit)
     }
     
     render() {
@@ -18,7 +28,7 @@ export default class Visit extends Component {
                     } else if(key === 'date') {
                         return <td key={cellKey}>
                                {
-                                moment(visitElem[key]).format('YYYY-MM-DD')
+                                moment(visitElem[key]).format('DD/MM/YYYY')
                                }
                                </td>
                     } else if((key === 'startTime') || (key === 'endTime')){
@@ -29,6 +39,12 @@ export default class Visit extends Component {
                         return <td key={cellKey}>{visitElem[key]}</td>
                     }
                 })}
+                <td>
+                    <button onClick={this.handleDelete}>x</button>
+                </td>
+                <td>
+                    <button onClick={this.handleEdit}>Duzenle</button>
+                </td>
             </tr>
         )
     }
