@@ -1,7 +1,9 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const path = require('path')
 const url = require('url')
+
+Menu.setApplicationMenu(null)
 
 function createWindow () {
 
@@ -39,6 +41,9 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 })
+
+// REST API requests to called in render process
+// For bridge look et preload.js file
 
 ipcMain.handle('get', async (event, stringInput) => {
     try {

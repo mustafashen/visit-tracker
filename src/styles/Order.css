@@ -1,0 +1,10 @@
+#Order select {
+    width: 140px;
+    height: 30px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    margin: 5px 5px 0 0;
+    box-sizing: border-box;
+    background-color: white;
+}

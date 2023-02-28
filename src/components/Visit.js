@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import deleteIcon from '../assets/delete.png'
+import editButton from '../assets/edit.png'
 
 export default class Visit extends Component {
     
@@ -40,10 +42,14 @@ export default class Visit extends Component {
                     }
                 })}
                 <td>
-                    <button onClick={this.handleDelete}>x</button>
+                    <button onClick={this.handleEdit} id='edit-btn'>
+                        <img alt='Edit Icon' src={editButton}/>
+                    </button>
                 </td>
                 <td>
-                    <button onClick={this.handleEdit}>Duzenle</button>
+                    <button onClick={this.handleDelete} id='delete-btn'>
+                        <img alt='Delete Icon' src={deleteIcon}/>
+                    </button>
                 </td>
             </tr>
         )

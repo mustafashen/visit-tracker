@@ -1,5 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
+// Bridge between main process and render request
+// Render process can access these functions through window.electron
+
 contextBridge.exposeInMainWorld(
   'electron',
   {

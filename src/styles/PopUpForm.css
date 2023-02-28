@@ -1,0 +1,61 @@
+.pop-up-form-ctn {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.pop-up-form-ctn h2 {
+    color: white;
+}
+
+.pop-up-form-ctn .form-wrp {
+    background-color: var(--dark);
+    width: 320px;
+    height: 90%;
+    margin: 20px auto 0 auto;
+    border-radius: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 10px 10px 30px 10px;
+}
+
+.pop-up-form-ctn .form-wrp form {
+    height: 95%;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    margin-top: 20px;
+    padding: 0 10px 0 10px;
+}
+.pop-up-form-ctn .form-top-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.pop-up-form-ctn .form-top-bar button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--mid-dark);
+    border-style: none;
+    box-shadow: 0px 0px 15px 4px rgba(255, 255, 255, 0.2);
+    transition: box-shadow 0.2s;
+    transition: background-color 0.2s;
+}
+.pop-up-form-ctn .form-top-bar button:hover {
+    box-shadow: 0px 0px 15px 4px rgba(255, 255, 255, 0.3);
+}
+
+.pop-up-form-ctn .form-top-bar button img{
+    width: 16px;
+    height: 16px;
+    filter: invert(1)
+}

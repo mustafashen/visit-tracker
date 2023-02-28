@@ -1,0 +1,45 @@
+#sidebar {
+    height: 100%;
+    width: 22%;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+#sidebar select {
+    height: 30px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    margin: 5px 5px 0 0;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+#sidebar #add-visitor-btn {
+    background-color: #57A45C;
+    border-radius: 5px;
+    border-style: none;
+    width: 100%;
+    height: 50px;
+    margin: 10px auto 10px auto;
+    box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: box-shadow 0.2s;
+}
+
+#sidebar #add-visitor-btn b{
+    margin-left: 6px;
+    font-size: 16px;
+}
+
+#sidebar #add-visitor-btn img{
+    filter: invert(1);
+}
+
+#sidebar #add-visitor-btn:hover {
+    box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.3);
+}

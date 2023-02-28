@@ -1,0 +1,18 @@
+@font-face {
+    font-family: Raleway;
+    src: url('../assets/Raleway-Medium.ttf');
+}
+
+
+:root {
+    --light: #EBECE7;
+    --mid-light: #83978D;
+    --mid: #56877D;
+    --mid-dark: #63717A;
+    --dark: #1F2721;
+}
+  
+body {
+    margin: 0;
+    font-family: Raleway;
+}

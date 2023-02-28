@@ -1,0 +1,86 @@
+#Main {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 99vw;
+    min-width: 1000px;
+    height: 99vh;
+    box-sizing: border-box;
+}
+
+b {
+    display: block;
+    margin: 10px 0 10px 0;
+}
+
+h2{
+    margin: 0 0 0 0;
+    color: var(--dark);
+}
+
+label {
+    padding: 0;
+}
+
+.input-blocks {
+    border-radius: 5px;
+    margin: 10px 0px;
+    padding: 10px;
+    background-color: var(--mid-dark);
+    box-sizing: border-box;
+    overflow-x: hidden;
+    color: var(--light);
+}
+
+
+.cb-list-blocks {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.input-blocks button {
+    background-color: white;
+    color: var(--dark);
+    border-style: none;
+    border-radius: 30px;
+    width: 100px;
+    height: 35px;
+    margin: 5px 10px 5px 0;
+    font-family: inherit;
+    box-shadow: 0px 0px 15px 4px rgba(255, 255, 255, 0.1);
+    transition: box-shadow 0.2s;
+    transition: background-color 0.2s;
+}
+
+.input-blocks button:hover {
+    box-shadow: 0px 0px 15px 4px rgba(255, 255, 255, 0.3);
+}
+
+.input-blocks button:active {
+    background-color: var(--dark);
+    color: white;
+}
+
+.kb-input {
+    width: 120px;
+    height: 30px;
+    border-radius: 5px;
+    border-style: solid;
+    box-sizing: border-box;
+    border-width: 1px;
+    margin: 5px 5px 0 0;
+}
+
+.cb-input {
+    border-style: solid;
+    border-width: 1px;
+    margin: 0px 5px 0 0;
+    width: 20px;
+    height: 20px;
+}
+
+.cb-wrp {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

@@ -2,14 +2,9 @@ import React, { Component } from 'react'
 import Visit from './Visit'
 
 export default class VisitList extends Component {
-
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         return (
-            <table>
+            <table id='VisitList'>
                 <thead>
                     <tr>
                         <th>Ziyaret Yeri</th>
@@ -19,8 +14,8 @@ export default class VisitList extends Component {
                         <th>Ziyaretciler</th>
                         <th>Yapilan Is</th>
                         <th>Yapilan Masraf</th>
-                        <th></th>
-                        <th></th>
+                        <th>Duzenle</th>
+                        <th>Sil</th>
                     </tr>
                 </thead>
                 <tbody>
