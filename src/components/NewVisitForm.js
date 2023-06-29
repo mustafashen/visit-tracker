@@ -5,15 +5,16 @@ export default class NewEntrySection extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            visit: {
-                loc: '',
-                date: '',
-                startTime: '',
-                endTime: '',
-                allVisitors: [],
-                workDone: '',
-                cost: ''
-            }}
+          visit: {
+              loc: '',
+              date: '',
+              startTime: '',
+              endTime: '',
+              allVisitors: [],
+              workDone: '',
+              cost: ''
+          }
+        }
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -91,7 +92,8 @@ export default class NewEntrySection extends Component {
           <div className='form-top-bar'>
               <h2>Yeni Ziyaret</h2>
               <button onClick={this.handleCloseForm}
-                      type='button'>
+                      type='button'
+                      aria-label='close button'>
                 <img src={closeIcon}/>
               </button>
           </div>

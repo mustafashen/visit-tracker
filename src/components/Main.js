@@ -148,13 +148,16 @@ export default class Main extends Component {
         <div id='sidebar'>
           <div>
             <button id='add-visitor-btn' 
-                    onClick={() => {this.setState({newVisitShow: true})}}>
-              <img src={editIcon}/>
+                    onClick={() => {
+                      this.setState({newVisitShow: true})
+                      }}>
+              <img alt='edit button' src={editIcon}/>
               <b>Ziyaret Ekle</b>
             </button>
             {
               this.state.newVisitShow ? 
-              <NewEntrySection createNewVisit={this.create} 
+              <NewEntrySection 
+                createNewVisit={this.create} 
                 visitorChoices={this.state.visitorChoices}
                 locationChoices={this.state.locationChoices}
                 closeAddForm={this.closeAddForm}/> :
@@ -162,22 +165,26 @@ export default class Main extends Component {
             }
           </div>
           <div>
-            <QueryForm locationChoices={this.state.locationChoices} 
+            <QueryForm 
+              locationChoices={this.state.locationChoices} 
               visitorChoices={this.state.visitorChoices}
               makeNewQuery={this.query}/>
           </div>
         </div>
         <div id='content'>
-          <VisitList visits={this.state.visits}
+          <VisitList 
+            visits={this.state.visits}
             deleteVisit={this.delete}
             activateEdit={this.activateEdit}/>
           {
-            this.state.visitToUpdate ? <UpdateVisitForm updateVisit={this.update}
-                                        visitorChoices={this.state.visitorChoices}
-                                        locationChoices={this.state.locationChoices}
-                                        closeEdit={this.closeEdit}
-                                        visitToUpdate={this.state.visitToUpdate}/> 
-                                     : false
+            this.state.visitToUpdate ? 
+            <UpdateVisitForm 
+              updateVisit={this.update}
+              visitorChoices={this.state.visitorChoices}
+              locationChoices={this.state.locationChoices}
+              closeEdit={this.closeEdit}
+              visitToUpdate={this.state.visitToUpdate}/> 
+            : false
           }
         </div>
       </div>

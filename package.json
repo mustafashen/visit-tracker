@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "electron": "^22.0.2",
-    "electron-builder": "^23.6.0"
+    "electron-builder": "^23.6.0",
+    "electron-mock-ipc": "^0.3.12"
   }
 }

@@ -42,12 +42,12 @@ export default class Visit extends Component {
                     }
                 })}
                 <td>
-                    <button onClick={this.handleEdit} id='edit-btn'>
+                    <button onClick={this.handleEdit} id='edit-btn' aria-label='edit button'>
                         <img alt='Edit Icon' src={editButton}/>
                     </button>
                 </td>
                 <td>
-                    <button onClick={this.handleDelete} id='delete-btn'>
+                    <button onClick={this.handleDelete} id='delete-btn' aria-label='delete button'>
                         <img alt='Delete Icon' src={deleteIcon}/>
                     </button>
                 </td>
